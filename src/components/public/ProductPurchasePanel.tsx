@@ -1,12 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ExternalButton, LinkButton } from "@/components/shared/Button";
 import { Eyebrow } from "@/components/shared/SectionHeading";
 import { ChurnIcon, DropIcon, FlaskIcon, WhatsAppIcon } from "@/components/shared/Icons";
 import { ProductGallery } from "@/components/public/ProductGallery";
 import { ProductVariantSelector } from "@/components/public/ProductVariantSelector";
 import { buildWhatsAppHref } from "@/lib/contact";
+import { cn } from "@/lib/utils";
 import { FSSAI_LICENSE_NUMBER } from "@/lib/lab-report";
 import { getPackSizes, orderMessage } from "@/lib/pack-sizes";
 import type { ProductWithRelations } from "@/lib/types";
@@ -49,6 +50,39 @@ export function ProductPurchasePanel({
     const generalIndex = product.images.findIndex((pm) => pm.variantId === null);
     setActiveImageIndex(generalIndex !== -1 ? generalIndex : 0);
   }
+
+  // Phones: once the main order buttons scroll out of view (upwards), show a slim sticky
+  // order bar — hidden again while the footer is on screen so it never covers it.
+  // Measured on scroll rather than with IntersectionObserver: observers only fire when an
+  // edge is crossed, so a fast flick past the buttons could leave the bar hidden.
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const [pastCta, setPastCta] = useState(false);
+  const [footerVisible, setFooterVisible] = useState(false);
+  useEffect(() => {
+    const footer = document.querySelector("footer");
+    let frame = 0;
+    const measure = () => {
+      frame = 0;
+      const cta = ctaRef.current;
+      if (!cta) return;
+      setPastCta(cta.getBoundingClientRect().bottom < 0);
+      setFooterVisible(footer ? footer.getBoundingClientRect().top < window.innerHeight : false);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(measure);
+    };
+    measure();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+  const showStickyBar = pastCta && !footerVisible;
+
+  const orderHref = whatsappNumber ? buildWhatsAppHref(whatsappNumber, orderMessage(product.name, selected?.label)) : null;
 
   const enquireHref = selectedVariantId
     ? `/contact?product=${product.slug}&variant=${selectedVariantId}`
@@ -105,10 +139,10 @@ export function ProductPurchasePanel({
           <ProductVariantSelector sizes={sizes} selectedId={selectedVariantId} onSelect={handleSelectVariant} />
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-          {whatsappNumber ? (
+        <div ref={ctaRef} className="mt-8 flex flex-col gap-3 sm:flex-row">
+          {orderHref ? (
             <ExternalButton
-              href={buildWhatsAppHref(whatsappNumber, orderMessage(product.name, selected?.label))}
+              href={orderHref}
               target="_blank"
               rel="noreferrer noopener"
               size="lg"
@@ -137,6 +171,35 @@ export function ProductPurchasePanel({
             </div>
           ))}
         </dl>
+      </div>
+
+      <div
+        aria-hidden={!showStickyBar}
+        inert={!showStickyBar}
+        className={cn(
+          "fixed inset-x-0 bottom-0 z-40 border-t border-border bg-cream/95 px-5 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-3 shadow-[0_-12px_30px_-20px_rgba(35,21,15,0.5)] backdrop-blur-md transition-transform duration-300 lg:hidden",
+          showStickyBar ? "translate-y-0" : "translate-y-full"
+        )}
+      >
+        <div className="mx-auto flex max-w-lg items-center gap-4">
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-xs text-muted">{product.name}</p>
+            <p className="font-heading text-lg leading-tight text-maroon">
+              {selected?.label}
+              {selected?.packaging ? <span className="text-sm text-muted"> &middot; {selected.packaging}</span> : null}
+            </p>
+          </div>
+          {orderHref ? (
+            <ExternalButton href={orderHref} target="_blank" rel="noreferrer noopener" className="shrink-0">
+              <WhatsAppIcon className="h-[18px] w-[18px]" />
+              Order
+            </ExternalButton>
+          ) : (
+            <LinkButton href={enquireHref} className="shrink-0">
+              Enquire
+            </LinkButton>
+          )}
+        </div>
       </div>
     </div>
   );

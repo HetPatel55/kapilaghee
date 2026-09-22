@@ -13,8 +13,8 @@ import type { PageSectionWithRelations } from "@/lib/types";
 export function BilonaFeature({ steps }: { steps: PageSectionWithRelations[] }) {
   return (
     <Section tone="white" className="overflow-hidden">
-      <Container className="grid items-center gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
-        <div className="reveal relative mx-auto w-full max-w-[460px]">
+      <Container className="grid items-center gap-10 sm:gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+        <div className="reveal relative mx-auto w-full max-w-[250px] sm:max-w-[460px]">
           <div aria-hidden="true" className="absolute inset-x-6 bottom-0 top-10 rounded-t-full bg-sand" />
           <Image
             src="/images/illustrations/bilona-churning.png"
@@ -38,9 +38,9 @@ export function BilonaFeature({ steps }: { steps: PageSectionWithRelations[] }) 
           />
 
           {steps.length > 0 ? (
-            <ol className="mt-10 grid gap-x-10 gap-y-7 sm:grid-cols-2">
+            <ol className="mt-8 grid gap-x-10 gap-y-5 sm:mt-10 sm:grid-cols-2 sm:gap-y-7">
               {steps.slice(0, 4).map((step, i) => (
-                <li key={step.id} className="border-t border-border pt-5">
+                <li key={step.id} className="border-t border-border pt-4 sm:pt-5">
                   <span className="font-heading text-sm italic text-warm-gold">Step {i + 1}</span>
                   <h3 className="mt-1 font-heading text-xl text-maroon">{step.title}</h3>
                   {step.body ? <p className="mt-2 text-sm leading-relaxed text-muted">{step.body}</p> : null}

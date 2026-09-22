@@ -30,20 +30,22 @@ export function ProductRange({
           />
           <Link
             href="/our-ghee"
-            className="group inline-flex shrink-0 items-center gap-2 text-sm font-medium text-maroon"
+            className="group hidden shrink-0 items-center gap-2 text-sm font-medium text-maroon md:inline-flex"
           >
             View product details
             <ArrowRightIcon className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
 
-        <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Phones: a swipeable row (each card ~80% wide so the next one peeks in).
+            Tablet/desktop: a regular grid. */}
+        <ul className="scrollbar-none -mx-5 mt-9 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-2 sm:mx-0 sm:mt-12 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
           {sizes.map((size) => {
             const enquireHref = `/contact?product=${product.slug}&variant=${size.variant.id}`;
             return (
               <li
                 key={size.variant.id}
-                className="reveal group flex flex-col overflow-hidden rounded-3xl border border-border bg-white transition-shadow duration-300 hover:shadow-[0_24px_50px_-30px_rgba(60,30,10,0.45)]"
+                className="group flex w-[80%] shrink-0 snap-center flex-col overflow-hidden rounded-3xl border border-border bg-white transition-shadow duration-300 hover:shadow-[0_24px_50px_-30px_rgba(60,30,10,0.45)] sm:w-auto"
               >
                 <div className="relative flex aspect-[5/4] items-end justify-center overflow-hidden bg-[radial-gradient(ellipse_at_50%_85%,#f6e3b4,#f3e8d2_70%)] px-8 pt-8">
                   {size.image ? (
@@ -62,8 +64,8 @@ export function ProductRange({
                   </span>
                 </div>
 
-                <div className="flex flex-1 flex-col p-6">
-                  <p className="font-heading text-3xl text-maroon">{size.label}</p>
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
+                  <p className="font-heading text-[1.7rem] text-maroon sm:text-3xl">{size.label}</p>
                   {size.bestFor ? <p className="mt-1.5 text-sm text-muted">{size.bestFor}</p> : null}
                   <div className="mt-6 flex-1" />
                   {whatsappNumber ? (
@@ -87,6 +89,13 @@ export function ProductRange({
             );
           })}
         </ul>
+        <Link
+          href="/our-ghee"
+          className="mt-6 flex items-center justify-center gap-2 text-sm font-medium text-maroon md:hidden"
+        >
+          View product details
+          <ArrowRightIcon className="h-4 w-4" />
+        </Link>
       </Container>
     </Section>
   );

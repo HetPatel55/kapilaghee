@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Logo } from "@/components/shared/Logo";
@@ -8,6 +8,11 @@ import { ExternalButton, LinkButton } from "@/components/shared/Button";
 import { WhatsAppIcon } from "@/components/shared/Icons";
 import { NAV_LINKS } from "@/lib/nav";
 import { cn } from "@/lib/utils";
+
+/** Releases the mobile-menu scroll lock immediately (the effect below re-applies it when open). */
+function unlockBodyScroll() {
+  document.body.style.overflow = "";
+}
 
 const PROMISES = ["Hand-churned by the Bilona method", "No additives. No preservatives.", "FSSAI licensed & lab tested"];
 
@@ -28,6 +33,14 @@ export function Header({ whatsappHref }: { whatsappHref: string | null }) {
     setMenuOpen(false);
   }
 
+  // Set when a page is chosen from the mobile menu, so the new page always opens at the top.
+  const scrollTopOnNav = useRef(false);
+  useEffect(() => {
+    if (!scrollTopOnNav.current) return;
+    scrollTopOnNav.current = false;
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+  }, [pathname]);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -43,6 +56,18 @@ export function Header({ whatsappHref }: { whatsappHref: string | null }) {
   }, [menuOpen]);
 
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+
+  // Close the menu and release the scroll lock *before* navigation, rather than after the
+  // new page renders — a locked body can stop the browser scrolling the new page to the top.
+  function handleMobileNav(href: string) {
+    unlockBodyScroll();
+    setMenuOpen(false);
+    if (href === pathname) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      scrollTopOnNav.current = true;
+    }
+  }
 
   const cta = whatsappHref ? (
     <ExternalButton href={whatsappHref} target="_blank" rel="noreferrer noopener" size="md">
@@ -134,6 +159,7 @@ export function Header({ whatsappHref }: { whatsappHref: string | null }) {
                 <Link
                   key={link.href}
                   href={link.href}
+                  onClick={() => handleMobileNav(link.href)}
                   aria-current={isActive(link.href) ? "page" : undefined}
                   className={cn(
                     "border-b border-border/70 py-4 font-heading text-2xl",

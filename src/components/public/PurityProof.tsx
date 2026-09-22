@@ -33,21 +33,23 @@ export function PurityProof({ showLink = true }: { showLink?: boolean }) {
           </p>
         </div>
 
-        <ul className="mt-12 grid gap-px overflow-hidden rounded-3xl bg-cream/10 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-9 grid grid-cols-2 gap-px overflow-hidden rounded-3xl bg-cream/10 sm:mt-12 lg:grid-cols-4">
           {LAB_HIGHLIGHTS.map((item) => (
-            <li key={item.label} className="reveal flex flex-col bg-cocoa p-7">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-cream/55">{item.label}</p>
-              <p className="mt-4 font-heading text-[2.6rem] leading-none text-kapila-gold">{item.value}</p>
-              <p className="mt-4 flex-1 text-sm leading-relaxed text-cream/70">{item.note}</p>
-              <p className="mt-6 inline-flex w-fit items-center gap-2 rounded-full bg-cream/[0.07] px-3 py-1 text-xs text-cream/75">
+            <li key={item.label} className="flex flex-col bg-cocoa p-4 sm:p-7">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-cream/55 sm:text-[11px] sm:tracking-[0.22em]">{item.label}</p>
+              <p className="mt-3 font-heading text-[1.65rem] leading-none text-kapila-gold sm:mt-4 sm:text-[2.6rem]">{item.value}</p>
+              <p className="mt-3 flex-1 text-[12.5px] leading-snug text-cream/70 sm:mt-4 sm:text-sm sm:leading-relaxed">{item.note}</p>
+              <p className="mt-4 inline-flex w-fit items-center gap-2 rounded-full bg-cream/[0.07] px-2.5 py-1 text-[11px] text-cream/75 sm:mt-6 sm:px-3 sm:text-xs">
                 <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-[#7fc26b]" />
-                Passed &middot; {item.limitLabel}
+                Passed
+                {/* The note already states the limit, so phones show just "Passed". */}
+                <span className="hidden sm:inline">&middot; {item.limitLabel}</span>
               </p>
             </li>
           ))}
         </ul>
 
-        <div className="mt-8 flex flex-col justify-between gap-4 text-sm text-cream/55 sm:flex-row sm:items-center">
+        <div className="mt-6 flex flex-col justify-between gap-3 text-[13px] text-cream/55 sm:mt-8 sm:flex-row sm:items-center sm:text-sm">
           <p>
             Report no. {LAB_REPORT.reportNumber} &middot; Issued {LAB_REPORT.issued}
           </p>

@@ -67,6 +67,14 @@ body {
   border-radius: 4px;
 }
 
+/* Horizontal swipe rows on phones: keep them scrollable but hide the scrollbar. */
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 .font-heading {
   font-family: var(--font-heading);
   font-optical-sizing: auto;

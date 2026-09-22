@@ -16,8 +16,8 @@ export function Footer({ settings }: { settings: BusinessSettings | null }) {
 
   return (
     <footer className="bg-dark-brown text-cream/80">
-      <Container className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr] lg:gap-12 lg:py-14">
-        <div className="sm:col-span-2 lg:col-span-1">
+      <Container className="grid grid-cols-2 gap-x-6 gap-y-9 py-10 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr] lg:gap-12 lg:py-14">
+        <div className="col-span-2 lg:col-span-1">
           <Logo tone="cream" />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-cream/60">
             Pure A2 Gir cow ghee, hand-churned by the Bilona method in Surat, Gujarat. Nothing added.
@@ -58,7 +58,7 @@ export function Footer({ settings }: { settings: BusinessSettings | null }) {
         ) : null}
 
         {settings?.address ? (
-          <FooterColumn title="Visit us">
+          <FooterColumn title="Visit us" className="col-span-2 lg:col-span-1">
             <li>
               <address className="whitespace-pre-line not-italic leading-relaxed">{settings.address}</address>
             </li>
@@ -85,11 +85,20 @@ export function Footer({ settings }: { settings: BusinessSettings | null }) {
   );
 }
 
-function FooterColumn({ title, children }: { title: string; children: React.ReactNode }) {
+function FooterColumn({
+  title,
+  className,
+  children,
+}: {
+  title: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <div>
+    <div className={className}>
       <h3 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-kapila-gold/90">{title}</h3>
-      <ul className="mt-4 space-y-2.5 text-sm">{children}</ul>
+      {/* Taller rows on phones so links are comfortable tap targets. */}
+      <ul className="mt-3 text-sm lg:mt-4 lg:space-y-2.5 [&_a]:inline-block [&_a]:py-1.5 lg:[&_a]:py-0">{children}</ul>
     </div>
   );
 }

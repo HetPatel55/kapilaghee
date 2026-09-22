@@ -54,9 +54,9 @@ export default async function OurStoryPage() {
       />
 
       <Section tone="cream">
-        <Container className="grid gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
-          <figure className="lg:sticky lg:top-28 lg:self-start">
-            <div className="relative overflow-hidden rounded-t-full bg-sand px-8 pt-12">
+        <Container className="grid gap-10 sm:gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+          <figure className="mx-auto w-full max-w-[280px] sm:max-w-none lg:sticky lg:top-28 lg:self-start">
+            <div className="relative overflow-hidden rounded-t-full bg-sand px-5 pt-8 sm:px-8 sm:pt-12">
               {image ? (
                 <Image
                   src={image.url}
@@ -76,7 +76,7 @@ export default async function OurStoryPage() {
                 />
               )}
             </div>
-            <figcaption className="mt-4 text-center text-sm italic text-muted">
+            <figcaption className="mt-3 text-center text-[13px] italic text-muted sm:mt-4 sm:text-sm">
               The bilona — a wooden churn used in Indian homes for generations.
             </figcaption>
           </figure>
@@ -85,7 +85,7 @@ export default async function OurStoryPage() {
             {intro?.body ? (
               <RichText
                 content={intro.body}
-                className="text-[17px] leading-[1.8] text-ink/80 [&>p:first-child]:font-heading [&>p:first-child]:text-[1.6rem] [&>p:first-child]:leading-snug [&>p:first-child]:text-maroon [&>p]:mb-6"
+                className="text-base leading-[1.8] text-ink/80 sm:text-[17px] [&>p:first-child]:font-heading [&>p:first-child]:text-[1.3rem] [&>p:first-child]:leading-snug [&>p:first-child]:text-maroon sm:[&>p:first-child]:text-[1.6rem] [&>p]:mb-5 sm:[&>p]:mb-6"
               />
             ) : null}
             {placeholder?.body ? (
@@ -95,9 +95,9 @@ export default async function OurStoryPage() {
             ) : null}
 
             {settings?.address ? (
-              <div className="mt-10 rounded-3xl bg-sand p-7">
+              <div className="mt-8 rounded-3xl bg-sand p-5 sm:mt-10 sm:p-7">
                 <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-warm-gold">Where we are</p>
-                <address className="mt-3 whitespace-pre-line font-heading text-lg not-italic leading-relaxed text-maroon">
+                <address className="mt-3 whitespace-pre-line font-heading text-base not-italic leading-relaxed text-maroon sm:text-lg">
                   {settings.address}
                 </address>
               </div>
@@ -109,14 +109,19 @@ export default async function OurStoryPage() {
       <Section tone="white" className="pb-12 sm:pb-14 lg:pb-16">
         <Container>
           <SectionHeading align="center" eyebrow="What we stand for" title="Three things we never compromise on" />
-          <ul className="mt-14 grid gap-6 md:grid-cols-3">
+          <ul className="mt-8 grid gap-3 sm:mt-14 sm:gap-6 md:grid-cols-3">
             {VALUES.map(({ icon: Icon, title, body }) => (
-              <li key={title} className="reveal rounded-3xl border border-border bg-cream p-8">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-maroon text-kapila-gold">
-                  <Icon className="h-6 w-6" />
+              <li
+                key={title}
+                className="reveal flex gap-4 rounded-3xl border border-border bg-cream p-5 sm:block sm:p-8"
+              >
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-maroon text-kapila-gold sm:h-12 sm:w-12">
+                  <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </span>
-                <h3 className="mt-6 font-heading text-2xl text-maroon">{title}</h3>
-                <p className="mt-2 leading-relaxed text-muted">{body}</p>
+                <div>
+                  <h3 className="font-heading text-xl text-maroon sm:mt-6 sm:text-2xl">{title}</h3>
+                  <p className="mt-1 text-[15px] leading-relaxed text-muted sm:mt-2 sm:text-base">{body}</p>
+                </div>
               </li>
             ))}
           </ul>
@@ -125,7 +130,7 @@ export default async function OurStoryPage() {
 
       <section className="bg-white pb-16 sm:pb-20 lg:pb-24">
         <Container>
-          <div className="relative h-[340px] overflow-hidden rounded-[32px] sm:h-[440px]">
+          <div className="relative h-[300px] overflow-hidden rounded-[28px] sm:h-[440px] sm:rounded-[32px]">
             <Image
               src="/images/lifestyle/kitchen-pour.jpg"
               alt="Kapila ghee being poured over a freshly cooked dish in a sunlit kitchen"
@@ -134,7 +139,7 @@ export default async function OurStoryPage() {
               className="object-cover object-[center_72%]"
             />
             <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-dark-brown/75 via-dark-brown/10 to-transparent" />
-            <p className="absolute bottom-8 left-8 right-8 max-w-lg font-heading text-2xl leading-snug text-cream sm:bottom-10 sm:left-10 sm:text-3xl">
+            <p className="absolute bottom-6 left-6 right-6 max-w-lg font-heading text-xl leading-snug text-cream sm:bottom-10 sm:left-10 sm:text-3xl">
               A spoonful of pure ghee, the way it was meant to taste.
             </p>
           </div>

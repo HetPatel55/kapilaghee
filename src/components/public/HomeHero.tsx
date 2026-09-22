@@ -30,15 +30,15 @@ export function HomeHero({
         className="pointer-events-none absolute -right-40 top-10 h-[640px] w-[640px] rounded-full bg-[radial-gradient(circle,rgba(242,194,61,0.28),transparent_65%)] lg:right-0"
       />
 
-      <Container className="relative grid items-center gap-14 pb-16 pt-10 sm:pt-14 lg:grid-cols-[1.08fr_0.92fr] lg:gap-10 lg:pb-24 lg:pt-16">
+      <Container className="relative grid items-center gap-10 pb-14 pt-8 sm:gap-14 sm:pb-16 sm:pt-14 lg:grid-cols-[1.08fr_0.92fr] lg:gap-10 lg:pb-24 lg:pt-16">
         <div className="animate-rise">
           <Eyebrow>A2 Gir cow ghee &middot; Surat, Gujarat</Eyebrow>
-          <h1 className="mt-6 max-w-xl font-heading text-[2.75rem] font-medium leading-[1.04] tracking-[-0.02em] text-maroon text-balance sm:text-6xl lg:text-[4.25rem]">
+          <h1 className="mt-5 max-w-xl font-heading text-[2.35rem] font-medium leading-[1.06] tracking-[-0.02em] text-maroon text-balance sm:mt-6 sm:text-6xl lg:text-[4.25rem]">
             {title}
           </h1>
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-ink/70 text-pretty">{body}</p>
+          <p className="mt-4 max-w-lg text-base leading-relaxed text-ink/70 text-pretty sm:mt-6 sm:text-lg">{body}</p>
 
-          <div className="mt-9 flex flex-wrap items-center gap-3">
+          <div className="mt-7 grid gap-3 sm:mt-9 sm:flex sm:flex-wrap sm:items-center">
             {whatsappHref ? (
               <ExternalButton href={whatsappHref} target="_blank" rel="noreferrer noopener" size="lg">
                 <WhatsAppIcon className="h-5 w-5" />
@@ -54,7 +54,7 @@ export function HomeHero({
             </LinkButton>
           </div>
 
-          <ul className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-border pt-6 text-sm text-ink/70">
+          <ul className="mt-7 flex flex-wrap gap-x-5 gap-y-2.5 border-t border-border pt-5 text-[13px] text-ink/70 sm:mt-10 sm:gap-x-6 sm:gap-y-3 sm:pt-6 sm:text-sm">
             {PROOF_POINTS.map((point) => (
               <li key={point} className="flex items-center gap-2">
                 <CheckIcon className="h-4 w-4 text-success" />
@@ -64,7 +64,7 @@ export function HomeHero({
           </ul>
         </div>
 
-        <div className="relative mx-auto w-full max-w-[400px] animate-rise [animation-delay:120ms] sm:max-w-[430px]">
+        <div className="relative mx-auto w-full max-w-[290px] animate-rise [animation-delay:120ms] sm:max-w-[430px]">
           {/* Arch — echoes the jharokha/temple arch; the jar stands in its doorway. */}
           <div className="relative aspect-[4/5] overflow-hidden rounded-t-full bg-[linear-gradient(180deg,#f3e3bf,#efd79f)]">
             <div
@@ -85,7 +85,7 @@ export function HomeHero({
               className="absolute inset-x-0 bottom-0 mx-auto h-[92%] w-auto object-contain drop-shadow-[0_30px_30px_rgba(60,30,10,0.28)]"
             />
           ) : null}
-          <ChurnSeal className="absolute -left-4 top-10 h-28 w-28 sm:-left-10 sm:h-32 sm:w-32" />
+          <ChurnSeal className="absolute -left-8 top-6 h-24 w-24 sm:-left-10 sm:top-10 sm:h-32 sm:w-32" />
         </div>
       </Container>
     </section>

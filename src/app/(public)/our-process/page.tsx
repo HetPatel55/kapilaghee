@@ -56,7 +56,7 @@ export default async function OurProcessPage() {
             height={555}
             priority
             sizes="(min-width: 1024px) 480px, 90vw"
-            className="mx-auto h-auto w-full max-w-[480px]"
+            className="mx-auto h-auto w-full max-w-[300px] sm:max-w-[480px]"
           />
         }
       />
@@ -67,7 +67,7 @@ export default async function OurProcessPage() {
             align="center"
             eyebrow="From milk to ghee"
             title="Four steps. No shortcuts."
-            className="mb-16"
+            className="mb-10 sm:mb-16"
           />
           <ProcessTimeline steps={steps} />
         </Container>
@@ -81,7 +81,7 @@ export default async function OurProcessPage() {
             description="Both are called ghee, but they're made very differently. Here's what sets the Bilona way apart."
           />
 
-          <div className="mt-12 overflow-hidden rounded-3xl border border-border bg-white">
+          <div className="mt-8 overflow-hidden rounded-3xl border border-border bg-white sm:mt-12">
             <div className="hidden grid-cols-[0.6fr_1.2fr_1fr] border-b border-border bg-sand text-sm font-medium sm:grid">
               <span className="px-6 py-4 text-muted" />
               <span className="bg-maroon px-6 py-4 text-cream">The Bilona way — Kapila</span>
@@ -93,15 +93,15 @@ export default async function OurProcessPage() {
                   key={row.aspect}
                   className="grid border-b border-border last:border-b-0 sm:grid-cols-[0.6fr_1.2fr_1fr]"
                 >
-                  <dt className="px-6 pt-5 font-heading text-lg text-maroon sm:py-5">{row.aspect}</dt>
-                  <dd className="flex gap-3 px-6 py-3 text-[15px] text-ink sm:bg-maroon/[0.03] sm:py-5">
+                  <dt className="px-5 pt-5 font-heading text-lg text-maroon sm:px-6 sm:py-5">{row.aspect}</dt>
+                  <dd className="flex gap-3 px-5 py-3 text-[15px] text-ink sm:bg-maroon/[0.03] sm:px-6 sm:py-5">
                     <CheckIcon className="mt-0.5 h-5 w-5 text-success" />
                     <span>
                       <span className="sr-only">Bilona way: </span>
                       {row.bilona}
                     </span>
                   </dd>
-                  <dd className="px-6 pb-5 text-[15px] text-muted sm:py-5 sm:pl-6">
+                  <dd className="px-5 pb-5 text-[15px] text-muted sm:px-6 sm:py-5">
                     <span className="text-xs uppercase tracking-wide text-muted/80 sm:hidden">Cream method: </span>
                     {row.cream}
                   </dd>
@@ -110,8 +110,8 @@ export default async function OurProcessPage() {
             </dl>
           </div>
 
-          <div className="mt-12 flex flex-col items-start gap-4 rounded-3xl bg-dark-brown p-8 text-cream sm:flex-row sm:items-center sm:justify-between sm:p-10">
-            <p className="max-w-lg font-heading text-2xl leading-snug">
+          <div className="mt-8 flex flex-col items-start gap-5 rounded-3xl bg-dark-brown p-6 text-cream sm:mt-12 sm:flex-row sm:items-center sm:justify-between sm:p-10">
+            <p className="max-w-lg font-heading text-xl leading-snug sm:text-2xl">
               Taste the difference slow-made ghee makes.
             </p>
             <LinkButton href="/our-ghee" variant="light" size="lg">

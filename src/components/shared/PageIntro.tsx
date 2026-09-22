@@ -26,18 +26,18 @@ export function PageIntro({
       />
       <Container
         className={cn(
-          "relative grid items-center gap-10 py-14 sm:py-20",
+          "relative grid items-center gap-8 py-11 sm:gap-10 sm:py-20",
           Boolean(visual) && "lg:grid-cols-[1.1fr_0.9fr] lg:py-16",
           centered && "text-center"
         )}
       >
         <div className={cn("animate-rise", centered && "mx-auto max-w-2xl")}>
           <Eyebrow className={cn(centered && "justify-center")}>{eyebrow}</Eyebrow>
-          <h1 className="mt-5 font-heading text-[2.6rem] font-medium leading-[1.05] tracking-[-0.015em] text-maroon text-balance sm:text-[3.5rem]">
+          <h1 className="mt-4 font-heading text-[2.3rem] font-medium leading-[1.06] tracking-[-0.015em] text-maroon text-balance sm:mt-5 sm:text-[3.5rem]">
             {title}
           </h1>
           {description ? (
-            <p className={cn("mt-5 max-w-xl text-[17px] leading-relaxed text-ink/70 text-pretty", centered && "mx-auto")}>
+            <p className={cn("mt-4 max-w-xl text-base leading-relaxed text-ink/70 text-pretty sm:mt-5 sm:text-[17px]", centered && "mx-auto")}>
               {description}
             </p>
           ) : null}

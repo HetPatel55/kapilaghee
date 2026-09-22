@@ -37,7 +37,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${dmSans.variable}`}>
+    // data-scroll-behavior="smooth": keep smooth scrolling for in-page anchors (e.g. #faq), but
+    // let Next.js jump instantly to the top on page changes. Without it (Next 16 default), the
+    // top-of-page scroll animates and can be interrupted on phones, leaving users mid-page.
+    <html lang="en" data-scroll-behavior="smooth" className={`${fraunces.variable} ${dmSans.variable}`}>
       <body className="flex min-h-screen flex-col bg-cream text-ink antialiased">{children}</body>
     </html>
   );
