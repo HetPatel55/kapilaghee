@@ -4,18 +4,24 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Logo } from "@/components/shared/Logo";
-import { LinkButton } from "@/components/shared/Button";
+import { ExternalButton, LinkButton } from "@/components/shared/Button";
+import { WhatsAppIcon } from "@/components/shared/Icons";
 import { NAV_LINKS } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 
-export function Header() {
+const PROMISES = ["Hand-churned by the Bilona method", "No additives. No preservatives.", "FSSAI licensed & lab tested"];
+
+/**
+ * @param whatsappHref Business WhatsApp chat link, or null when no number is set in
+ *   Admin → Settings — the header then falls back to the enquiry form.
+ */
+export function Header({ whatsappHref }: { whatsappHref: string | null }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  // Reset menuOpen when the route changes — derived during render (React's documented
-  // pattern for resetting state in response to a prop/value change) rather than in an
-  // effect, which avoids an extra render pass.
+  // Close the menu on navigation — derived during render (React's documented pattern for
+  // resetting state when a value changes) rather than in an effect.
   const [lastPathname, setLastPathname] = useState(pathname);
   if (pathname !== lastPathname) {
     setLastPathname(pathname);
@@ -23,7 +29,7 @@ export function Header() {
   }
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -36,89 +42,112 @@ export function Header() {
     };
   }, [menuOpen]);
 
+  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+
+  const cta = whatsappHref ? (
+    <ExternalButton href={whatsappHref} target="_blank" rel="noreferrer noopener" size="md">
+      <WhatsAppIcon className="h-[18px] w-[18px]" />
+      Order on WhatsApp
+    </ExternalButton>
+  ) : (
+    <LinkButton href="/contact" size="md">
+      Enquire now
+    </LinkButton>
+  );
+
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 w-full transition-colors duration-300",
-        scrolled || menuOpen
-          ? "bg-cream/95 shadow-[0_1px_0_0_var(--color-border)] backdrop-blur"
-          : "bg-transparent"
-      )}
-    >
-      <div className="mx-auto flex w-full max-w-[1200px] items-center justify-between px-5 py-3 sm:px-6 lg:px-8">
-        <Logo />
-
-        <nav aria-label="Primary" className="hidden items-center gap-8 lg:flex">
-          {NAV_LINKS.map((link) => {
-            const active = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={active ? "page" : undefined}
-                className={cn(
-                  "text-sm font-medium tracking-wide text-ink/80 transition-colors hover:text-maroon",
-                  active && "text-maroon"
-                )}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="hidden lg:block">
-          <LinkButton href="/contact" size="md">
-            Enquire Now
-          </LinkButton>
-        </div>
-
-        <button
-          type="button"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-sm text-maroon lg:hidden"
-          aria-expanded={menuOpen}
-          aria-controls="mobile-menu"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          onClick={() => setMenuOpen((v) => !v)}
-        >
-          {menuOpen ? (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
-              <path d="M6 6l12 12M18 6l-12 12" strokeLinecap="round" />
-            </svg>
-          ) : (
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
-              <path d="M4 7h16M4 12h16M4 17h16" strokeLinecap="round" />
-            </svg>
-          )}
-        </button>
+    <>
+      <div className="bg-maroon-dark text-cream/85">
+        <ul className="mx-auto flex h-9 max-w-[1240px] items-center justify-center gap-8 px-5 text-[12px] tracking-[0.04em] sm:px-8">
+          {PROMISES.map((p, i) => (
+            <li key={p} className={cn("items-center gap-8", i === 0 ? "flex" : "hidden md:flex")}>
+              {i > 0 ? <span aria-hidden="true" className="h-1 w-1 rounded-full bg-kapila-gold/70" /> : null}
+              {p}
+            </li>
+          ))}
+        </ul>
       </div>
 
-      <div
-        id="mobile-menu"
+      <header
         className={cn(
-          "overflow-hidden bg-cream transition-[max-height] duration-300 ease-in-out lg:hidden",
-          menuOpen ? "max-h-[28rem] border-t border-border" : "max-h-0"
+          "sticky top-0 z-50 w-full border-b transition-[background-color,border-color,box-shadow] duration-300",
+          scrolled || menuOpen
+            ? "border-border/80 bg-cream/90 shadow-[0_10px_30px_-24px_rgba(35,21,15,0.6)] backdrop-blur-md"
+            : "border-transparent bg-cream"
         )}
       >
-        <nav
-          aria-label="Mobile"
-          inert={!menuOpen}
-          className="flex flex-col gap-1 px-5 py-4 sm:px-6"
+        <div className="mx-auto flex h-[72px] w-full max-w-[1240px] items-center justify-between gap-6 px-5 sm:px-8">
+          <Logo />
+
+          <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
+            {NAV_LINKS.map((link) => {
+              const active = isActive(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "relative rounded-full px-3.5 py-2 text-[15px] transition-colors",
+                    active ? "text-maroon" : "text-ink/70 hover:text-maroon"
+                  )}
+                >
+                  {link.label}
+                  {active ? (
+                    <span aria-hidden="true" className="absolute inset-x-0 -bottom-0.5 mx-auto h-1 w-1 rounded-full bg-maroon" />
+                  ) : null}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <div className="hidden lg:block">{cta}</div>
+
+          <button
+            type="button"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full text-maroon hover:bg-maroon/5 lg:hidden"
+            aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
+              {menuOpen ? (
+                <path d="M6 6l12 12M18 6 6 18" strokeLinecap="round" />
+              ) : (
+                <path d="M4 8h16M4 16h16" strokeLinecap="round" />
+              )}
+            </svg>
+          </button>
+        </div>
+
+        <div
+          id="mobile-menu"
+          className={cn(
+            "grid overflow-hidden bg-cream transition-[grid-template-rows] duration-300 ease-out lg:hidden",
+            menuOpen ? "grid-rows-[1fr] border-t border-border" : "grid-rows-[0fr]"
+          )}
         >
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="rounded-sm px-2 py-3 text-base font-medium text-ink/85 hover:bg-maroon/5 hover:text-maroon"
-            >
-              {link.label}
-            </Link>
-          ))}
-          <LinkButton href="/contact" size="md" className="mt-3 w-full">
-            Enquire Now
-          </LinkButton>
-        </nav>
-      </div>
-    </header>
+          <nav aria-label="Mobile" inert={!menuOpen} className="min-h-0">
+            <div className="flex flex-col px-5 pb-8 pt-3 sm:px-8">
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                  className={cn(
+                    "border-b border-border/70 py-4 font-heading text-2xl",
+                    isActive(link.href) ? "text-maroon" : "text-ink/85"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <div className="mt-6 [&>*]:w-full">{cta}</div>
+            </div>
+          </nav>
+        </div>
+      </header>
+    </>
   );
 }

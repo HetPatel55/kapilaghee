@@ -1,66 +1,49 @@
 "use client";
 
-import { useState } from "react";
-import { formatVariantLabel, cn } from "@/lib/utils";
-import type { ProductVariant } from "@prisma/client";
+import { cn } from "@/lib/utils";
+import type { PackSize } from "@/lib/pack-sizes";
 
 /**
- * Displays available pack sizes as selectable chips. Sizes are entirely data-driven —
- * nothing here is hard-coded, so new/changed variants from Admin show up automatically.
- *
- * Selecting a size only highlights it (and, where a parent passes `onSelect`, lets that
- * parent react — e.g. swapping the product gallery image). It never navigates by itself:
- * "Enquire Now" is a separate, explicit action elsewhere on the page. No price/stock is
- * shown or assumed (docs/future-ecommerce.md).
- *
- * Uncontrolled by default (manages its own selection locally). Pass `selectedId` +
- * `onSelect` to control it from a parent that needs to know the current selection.
+ * Pack sizes as selectable option cards. Sizes are data-driven (Admin manages variants).
+ * Selecting a size only highlights it and lets the parent react (e.g. swap the photo) —
+ * it never navigates; ordering/enquiring is a separate, explicit action.
  */
 export function ProductVariantSelector({
-  variants,
-  size = "md",
+  sizes,
   selectedId,
   onSelect,
 }: {
-  variants: ProductVariant[];
-  size?: "sm" | "md";
-  selectedId?: string | null;
-  onSelect?: (variantId: string) => void;
+  sizes: PackSize[];
+  selectedId: string | null;
+  onSelect: (variantId: string) => void;
 }) {
-  const [internalSelectedId, setInternalSelectedId] = useState<string | null>(
-    variants[0]?.id ?? null
-  );
-  const activeId = onSelect ? selectedId : internalSelectedId;
-
-  if (variants.length === 0) {
+  if (sizes.length === 0) {
     return <p className="text-sm text-muted">Pack sizes will be available shortly.</p>;
   }
 
   return (
-    <ul className="flex flex-wrap gap-2.5" aria-label="Available pack sizes">
-      {variants.map((variant) => {
-        const label = formatVariantLabel(variant.size, variant.unit);
-        const isActive = activeId === variant.id;
+    <div role="radiogroup" aria-label="Pack size" className="grid grid-cols-3 gap-3">
+      {sizes.map((size) => {
+        const active = selectedId === size.variant.id;
         return (
-          <li key={variant.id}>
-            <button
-              type="button"
-              aria-pressed={isActive}
-              aria-label={`Select the ${label} pack`}
-              onClick={() => (onSelect ? onSelect(variant.id) : setInternalSelectedId(variant.id))}
-              className={cn(
-                "inline-flex items-center rounded-sm border font-medium transition-colors",
-                size === "sm" ? "px-3 py-1 text-xs" : "px-4 py-1.5 text-sm",
-                isActive
-                  ? "border-maroon bg-maroon text-white"
-                  : "border-maroon/30 text-maroon hover:border-maroon hover:bg-maroon/5"
-              )}
-            >
-              {label}
-            </button>
-          </li>
+          <button
+            key={size.variant.id}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            onClick={() => onSelect(size.variant.id)}
+            className={cn(
+              "rounded-2xl border px-3 py-4 text-left transition-[border-color,background-color,box-shadow]",
+              active
+                ? "border-maroon bg-maroon/[0.04] shadow-[inset_0_0_0_1px_var(--color-maroon)]"
+                : "border-border bg-white hover:border-maroon/40"
+            )}
+          >
+            <span className="block font-heading text-2xl leading-none text-maroon">{size.label}</span>
+            {size.packaging ? <span className="mt-1.5 block text-xs text-muted">{size.packaging}</span> : null}
+          </button>
         );
       })}
-    </ul>
+    </div>
   );
 }

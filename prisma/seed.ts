@@ -257,8 +257,8 @@ async function main() {
 
   // Home
   const heroSection = await upsertSection("home", "hero", {
-    title: "Pure A2 Gir Cow Ghee",
-    body: "Pure ghee. Nothing added.",
+    title: "Pure ghee, churned the slow way.",
+    body: "A2 Gir cow ghee, hand-churned from curd by the traditional Bilona method. No additives, no preservatives — nothing but ghee.",
   });
   await db.pageSectionMedia.upsert({
     where: { pageSectionId_mediaId: { pageSectionId: heroSection.id, mediaId: jarHeroMedia.id } },
@@ -324,7 +324,7 @@ async function main() {
     body: [
       "Kapila Dairy Farm is a Gir cow ghee business based in Village Masma, Taluka Olpad, Surat, Gujarat. We started with one belief: ghee should be made the way it always was — slowly, by hand, with nothing added.",
       "That's why we work only with Gir cow milk, and why we still make our ghee the traditional way: the milk is set into curd, hand-churned in a wooden bilona to separate the butter, and then slow-heated into ghee. It takes longer than shortcuts would, but it's how we keep the flavor and quality consistent, batch after batch.",
-      "Everything we make comes out of our FSSAI-licensed facility here in Surat, and every batch is tested for purity by an independent lab before it's ready to go out — you can see the actual certificates on our Quality & Purity page.",
+      "Everything we make comes out of our FSSAI-licensed facility here in Surat, and our ghee has been independently lab tested for purity — you can see the actual report and license on our Quality & Purity page.",
       "No additives, no shortcuts — just pure ghee, made the way it should be.",
     ].join("\n\n"),
   });

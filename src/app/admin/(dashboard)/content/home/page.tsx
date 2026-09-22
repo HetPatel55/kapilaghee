@@ -7,16 +7,16 @@ import { listPageSectionsAdmin, listMediaAdmin } from "@/lib/admin-data";
 
 export const metadata: Metadata = { title: "Homepage Content | Kapila Admin" };
 
+// Only the sections the homepage actually renders. Older section rows (from the previous
+// homepage design) stay in the database but are hidden here, so every edit made on this
+// screen changes something visitors can see.
 const SECTION_CONFIG: Record<string, { label: string; description: string; hasImage?: boolean; bodyRows?: number }> = {
-  hero: { label: "Hero", description: "The first thing visitors see.", hasImage: true },
-  "why-kapila-intro": { label: "Why Kapila — Intro", description: "Heading and intro line for the differentiation section." },
-  "why-point-gir-cow": { label: "Why Kapila — Point: Gir Cow", description: "First supporting point." },
-  "why-point-purity": { label: "Why Kapila — Point: Purity", description: "Second supporting point." },
-  "why-point-quality": { label: "Why Kapila — Point: Quality", description: "Third supporting point." },
-  "quality-teaser": { label: "Quality & Purity Teaser", description: "Short teaser linking to the full Quality page." },
-  "story-teaser": { label: "Our Story Teaser", description: "Short excerpt linking to the full Story page.", hasImage: true },
-  "everyday-use-intro": { label: "Everyday Use", description: "How customers can use Kapila Ghee day to day." },
-  "final-cta": { label: "Final Call to Action", description: "The last prompt before the footer." },
+  hero: { label: "Hero", description: "Headline, intro line and product photo at the top of the homepage.", hasImage: true },
+  "benefits-intro": { label: "In Your Kitchen — Intro", description: "Heading and intro for the everyday-cooking section." },
+  "benefits-point-1": { label: "In Your Kitchen — Point 1", description: "Keep it about flavour and cooking, not health claims." },
+  "benefits-point-2": { label: "In Your Kitchen — Point 2", description: "Keep it about flavour and cooking, not health claims." },
+  "benefits-point-3": { label: "In Your Kitchen — Point 3", description: "Keep it about flavour and cooking, not health claims." },
+  "benefits-point-4": { label: "In Your Kitchen — Point 4", description: "Keep it about flavour and cooking, not health claims." },
 };
 
 export default async function AdminHomeContentPage() {
@@ -30,8 +30,8 @@ export default async function AdminHomeContentPage() {
       />
 
       <div className="space-y-4">
-        {sections.map((section, i) => {
-          const config = SECTION_CONFIG[section.key] ?? { label: section.key, description: "" };
+        {sections.filter((section) => section.key in SECTION_CONFIG).map((section, i) => {
+          const config = SECTION_CONFIG[section.key];
           const currentImage = section.media[0]?.media ?? null;
           return (
             <SectionCard key={section.id} title={config.label} description={config.description} defaultOpen={i === 0}>

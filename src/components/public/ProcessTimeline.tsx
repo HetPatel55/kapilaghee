@@ -1,71 +1,45 @@
 import Image from "next/image";
-import Link from "next/link";
-import { Container } from "@/components/shared/Container";
-import { Section } from "@/components/shared/Section";
-import { SectionHeading } from "@/components/shared/SectionHeading";
 import { EmptyState } from "@/components/shared/EmptyState";
+import { ChurnIcon, CowIcon, CurdIcon, FlameIcon } from "@/components/shared/Icons";
 import type { PageSectionWithRelations } from "@/lib/types";
 
-/**
- * Renders the confirmed production-process steps as a clean numbered timeline.
- *
- * Content safety: this component only ever renders what it's given. It does not contain
- * any hard-coded process description (e.g. Bilona method, hand-churning) — that content
- * is only shown once it exists as published PageSection rows, which happens only once the
- * business has confirmed it accurately describes current production (docs/requirements.md §2).
- */
-export function ProcessTimeline({
-  steps,
-  variant = "full",
-}: {
-  steps: PageSectionWithRelations[];
-  variant?: "full" | "teaser";
-}) {
-  if (variant === "teaser") {
-    if (steps.length === 0) return null;
-    return (
-      <Section tone="cream">
-        <Container>
-          <SectionHeading
-            eyebrow="Our Process"
-            title="How Kapila Ghee Is Made"
-            description="Made using the traditional Bilona method — hand-churned the way it always has been."
-          />
-          <StepList steps={steps.slice(0, 4)} />
-          <div className="mt-10">
-            <Link href="/our-process" className="text-sm font-semibold uppercase tracking-[0.1em] text-maroon hover:underline">
-              See Full Process &rarr;
-            </Link>
-          </div>
-        </Container>
-      </Section>
-    );
-  }
+// Icons follow the order of the confirmed process (milk → curd → churn → heat). If Admin
+// adds more steps they cycle, and an image uploaded to a step replaces its icon.
+const STEP_ICONS = [CowIcon, CurdIcon, ChurnIcon, FlameIcon];
 
+/**
+ * The confirmed production steps as a connected timeline.
+ *
+ * Content safety: this renders only what Admin has published under Our Process — no
+ * process description is hard-coded here (docs/requirements.md §2).
+ */
+export function ProcessTimeline({ steps }: { steps: PageSectionWithRelations[] }) {
   if (steps.length === 0) {
     return (
       <EmptyState
         title="Our process story is being finalized"
-        description="We're documenting our production process in detail together with the Kapila team. Check back soon."
+        description="We're documenting our production process in detail. Check back soon."
       />
     );
   }
 
-  return <StepList steps={steps} />;
-}
-
-function StepList({ steps }: { steps: PageSectionWithRelations[] }) {
   return (
-    <ol className="mt-12 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+    <ol className="relative grid gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+      {/* Connecting line behind the step markers (desktop). */}
+      <span aria-hidden="true" className="absolute left-[12%] right-[12%] top-8 hidden h-px bg-border lg:block" />
       {steps.map((step, i) => {
+        const Icon = STEP_ICONS[i % STEP_ICONS.length];
         const image = step.media[0]?.media;
         return (
-          <li key={step.id} className="relative">
-            <span className="font-heading text-4xl font-semibold text-warm-gold/70">
-              {String(i + 1).padStart(2, "0")}
+          <li key={step.id} className="reveal relative flex flex-col items-start lg:items-center lg:text-center">
+            <span className="relative flex h-16 w-16 items-center justify-center rounded-full bg-maroon text-kapila-gold ring-8 ring-white">
+              <Icon className="h-7 w-7" />
             </span>
+            <span className="mt-6 font-heading text-sm italic text-warm-gold">Step {String(i + 1).padStart(2, "0")}</span>
+            <h3 className="mt-1 font-heading text-2xl text-maroon text-balance">{step.title}</h3>
+            {step.body ? <p className="mt-3 max-w-xs text-[15px] leading-relaxed text-muted">{step.body}</p> : null}
             {image ? (
-              <div className="mt-4 aspect-[4/3] overflow-hidden rounded-md bg-white">
+              <div className="mt-5 aspect-[4/3] w-full overflow-hidden rounded-2xl">
                 <Image
                   src={image.url}
                   alt={image.altText ?? step.title ?? ""}
@@ -75,8 +49,6 @@ function StepList({ steps }: { steps: PageSectionWithRelations[] }) {
                 />
               </div>
             ) : null}
-            <h3 className="mt-4 font-heading text-lg font-semibold text-maroon">{step.title}</h3>
-            {step.body ? <p className="mt-2 text-sm leading-relaxed text-muted">{step.body}</p> : null}
           </li>
         );
       })}

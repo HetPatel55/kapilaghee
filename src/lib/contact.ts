@@ -10,6 +10,19 @@ export function toWhatsAppDigits(raw: string) {
   return raw.replace(/[^\d]/g, "");
 }
 
+/** Formats an Indian number for display, e.g. "919909680284" → "+91 99096 80284". */
+export function formatIndianPhone(raw: string) {
+  const digits = toWhatsAppDigits(raw);
+  const local = digits.length === 12 && digits.startsWith("91") ? digits.slice(2) : digits;
+  return local.length === 10 ? `+91 ${local.slice(0, 5)} ${local.slice(5)}` : raw;
+}
+
+/** A wa.me chat link, optionally with a pre-filled message. */
+export function buildWhatsAppHref(rawNumber: string, message?: string) {
+  const base = `https://wa.me/${toWhatsAppDigits(rawNumber)}`;
+  return message ? `${base}?text=${encodeURIComponent(message)}` : base;
+}
+
 /** Keeps a leading "+" (international prefix) but strips everything else non-numeric. */
 function toTelHref(raw: string) {
   const trimmed = raw.trim();

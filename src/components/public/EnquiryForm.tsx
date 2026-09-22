@@ -3,7 +3,8 @@
 import { useActionState, useRef } from "react";
 import { submitEnquiry, type EnquiryFormState } from "@/app/actions/enquiry";
 import { Button } from "@/components/shared/Button";
-import { toWhatsAppDigits } from "@/lib/contact";
+import { WhatsAppIcon } from "@/components/shared/Icons";
+import { buildWhatsAppHref } from "@/lib/contact";
 import { cn } from "@/lib/utils";
 
 const initialState: EnquiryFormState = { status: "idle" };
@@ -39,8 +40,7 @@ export function EnquiryForm({
       `(My WhatsApp: +91 ${phone})`,
     ].filter(Boolean);
 
-    const url = `https://wa.me/${toWhatsAppDigits(whatsappNumber)}?text=${encodeURIComponent(lines.join(" "))}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+    window.open(buildWhatsAppHref(whatsappNumber, lines.join(" ")), "_blank", "noopener,noreferrer");
     // Intentionally not preventing default — the form still submits normally underneath
     // so the enquiry is also saved for the business's records.
   }
@@ -49,9 +49,9 @@ export function EnquiryForm({
     return (
       <div
         role="status"
-        className="rounded-md border border-success/30 bg-success/5 px-6 py-8 text-center"
+        className="rounded-2xl border border-success/25 bg-success/5 px-6 py-10 text-center"
       >
-        <p className="font-heading text-lg text-ink">{state.message}</p>
+        <p className="font-heading text-xl text-ink">{state.message}</p>
         {whatsappNumber ? (
           <p className="mt-2 text-sm text-muted">We&rsquo;ve also opened WhatsApp for you in a new tab — send that message to reach us fastest.</p>
         ) : null}
@@ -62,7 +62,7 @@ export function EnquiryForm({
   return (
     <form ref={formRef} action={formAction} noValidate className="space-y-5" id="enquiry-form">
       {contextLabel ? (
-        <p className="rounded-sm border border-warm-gold/40 bg-kapila-gold/10 px-4 py-2.5 text-sm text-ink/80">
+        <p className="rounded-xl border border-warm-gold/30 bg-kapila-gold/10 px-4 py-3 text-sm text-ink/80">
           Enquiring about: <span className="font-medium text-maroon">{contextLabel}</span>
         </p>
       ) : null}
@@ -88,8 +88,8 @@ export function EnquiryForm({
       </Field>
 
       <Field label="WhatsApp Number" htmlFor="phone" error={state.fieldErrors?.phone} hint="10-digit mobile number">
-        <div className={cn("flex overflow-hidden rounded-sm border bg-white", state.fieldErrors?.phone ? "border-error" : "border-border")}>
-          <span className="flex items-center border-r border-border bg-black/[0.03] px-3.5 text-sm text-muted">
+        <div className={cn("flex h-12 overflow-hidden rounded-xl border bg-white transition-colors focus-within:border-maroon focus-within:ring-3 focus-within:ring-maroon/15", state.fieldErrors?.phone ? "border-error" : "border-border")}>
+          <span className="flex items-center border-r border-border bg-sand/60 px-4 text-[15px] text-muted">
             +91
           </span>
           <input
@@ -104,7 +104,7 @@ export function EnquiryForm({
             onInput={(e) => {
               e.currentTarget.value = e.currentTarget.value.replace(/\D/g, "").slice(0, 10);
             }}
-            className="w-full border-0 bg-transparent px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60 focus:outline-none"
+            className="w-full border-0 bg-transparent px-4 text-[15px] text-ink placeholder:text-muted/60 focus:outline-none"
           />
         </div>
       </Field>
@@ -131,9 +131,10 @@ export function EnquiryForm({
         size="lg"
         disabled={pending}
         onClick={handleSubmitClick}
-        className="w-full sm:w-auto"
+        className="w-full"
       >
-        {pending ? "Sending..." : whatsappNumber ? "Send via WhatsApp" : "Send Enquiry"}
+        {whatsappNumber && !pending ? <WhatsAppIcon className="h-5 w-5" /> : null}
+        {pending ? "Sending…" : whatsappNumber ? "Send via WhatsApp" : "Send enquiry"}
       </Button>
     </form>
   );
@@ -154,7 +155,7 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={htmlFor} className="mb-1.5 block text-sm font-medium text-ink">
+      <label htmlFor={htmlFor} className="mb-2 block text-sm font-medium text-ink">
         {label}
       </label>
       {children}
@@ -170,7 +171,7 @@ function Field({
 
 function inputClasses(hasError: boolean) {
   return cn(
-    "w-full rounded-sm border bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-muted/60",
+    "w-full rounded-xl border bg-white px-4 py-3 text-[15px] text-ink transition-colors placeholder:text-muted/60 focus:border-maroon focus:outline-none focus:ring-3 focus:ring-maroon/15",
     hasError ? "border-error" : "border-border"
   );
 }

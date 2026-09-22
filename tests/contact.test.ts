@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { getContactActions } from "../src/lib/contact";
+import { buildWhatsAppHref, formatIndianPhone, getContactActions } from "../src/lib/contact";
 
 const baseSettings = {
   phone: null as string | null,
@@ -45,4 +45,22 @@ test("removing a field removes only that action", () => {
 
   const withoutPhone = getContactActions({ ...baseSettings, email: "a@b.com" });
   assert.deepEqual(withoutPhone.map((a) => a.kind), ["email"]);
+});
+
+test("formatIndianPhone formats 12-digit (with 91) and 10-digit numbers the same way", () => {
+  assert.equal(formatIndianPhone("919909680284"), "+91 99096 80284");
+  assert.equal(formatIndianPhone("+91 99096-80284"), "+91 99096 80284");
+  assert.equal(formatIndianPhone("9909680284"), "+91 99096 80284");
+});
+
+test("formatIndianPhone leaves numbers it doesn't recognise untouched", () => {
+  assert.equal(formatIndianPhone("0261 2345678"), "0261 2345678");
+});
+
+test("buildWhatsAppHref URL-encodes the pre-filled message", () => {
+  assert.equal(buildWhatsAppHref("+91 99096 80284"), "https://wa.me/919909680284");
+  assert.equal(
+    buildWhatsAppHref("919909680284", "Order — 5 KG & more?"),
+    "https://wa.me/919909680284?text=Order%20%E2%80%94%205%20KG%20%26%20more%3F"
+  );
 });

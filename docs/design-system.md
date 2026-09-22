@@ -1,120 +1,85 @@
 # Kapila Dairy Farm — Design System
 
-Status: Phase 1 — initial tokens, to be refined during visual design in the next prompt.
-Last updated: 2026-08-18
+Status: v2 — full public-site redesign.
+Last updated: 2026-09-22
+
+The source of truth for values is `src/app/globals.css` (`@theme` block). This document explains the intent behind them.
 
 ## 1. Design Direction
 
-**Target feeling:** Modern Indian Heritage + Premium Dairy Brand — pure, warm, authentic, trustworthy, premium, traditional, modern, professional.
+**Target feeling:** Modern Indian heritage + premium dairy — warm, calm, trustworthy, and specific to Kapila rather than a generic food template.
 
-**What we are preserving from the existing identity:**
-- The maroon + golden-yellow + brown + cream palette already used on packaging and the logo.
-- The circular cow medallion as a recognizable brand device.
-- The angular "KAPILA" wordmark and its "DAIRY FARM" subtext treatment.
+**Brand pillars the design is built around** (confirmed by the business):
+1. **Pure — nothing added.** No additives, no preservatives.
+2. **The Bilona method.** Curd hand-churned in a wooden bilona, then slow-heated.
+3. **Proof, not promises.** FSSAI license and independent lab results, published with real figures.
 
-**What we are deliberately changing from the existing promotional graphics:**
-- The existing WhatsApp promo graphics are dense: multiple claim badges, drop shadows, comic-style distressed headline fonts, busy photo collages. The website will not copy these layouts.
-- We reduce to: generous white/cream space, one clear message per section, restrained use of maroon and gold as accents rather than full-bleed backgrounds everywhere, and photography treated with consistent, calm framing.
+**What we keep from the existing identity:** the maroon / label-yellow / cream palette, the geometric KAPILA wordmark, and the Gir cow.
 
-**What we are explicitly avoiding:**
-- Generic "organic green" food-brand look.
-- Generic Shopify/food-template aesthetics.
-- Excessive gradients, rounded-corner cards, icon clutter, cheap drop shadows, and heavy animation.
+**What we deliberately do not copy from the promotional graphics:** distressed display fonts, dense claim badges, photo collages with text baked in, and — importantly — the therapeutic claims printed on them ("improves immunity", "healing of wounds", etc.). Those need substantiation under FSSAI advertising rules and are never used on the site.
 
 ---
 
 ## 2. Color Tokens
 
-Starting values (from the brief), reviewed against the supplied packaging/logo assets — the packaging maroon and gold are close to these; refine with exact eyedropper values once high-res source files are available.
-
 ```
---color-maroon        #8F1D18   /* primary brand color — wordmark, name-plates, primary buttons */
---color-maroon-dark    #6E120F   /* hover/pressed state, dark accents */
---color-kapila-gold    #F4C542   /* packaging gold — accent fields, badges */
---color-warm-gold      #D99A25   /* secondary gold — borders, dividers, icons */
---color-cream          #FFF8E7   /* page background, card background */
---color-dark-brown     #3B2118   /* body text on light backgrounds, footer background option */
---color-white          #FFFFFF   /* surfaces, reversed text on maroon */
-
---color-ink            #2A1B14   /* primary body text (slightly softer than pure black) */
---color-muted          #7A6A5C   /* secondary/muted text on cream */
---color-border          #E7D9BE   /* hairline borders on cream surfaces */
---color-success         #4B7A3B   /* form success state — muted, not the packaging's bright green */
---color-error            #B3261E   /* form error state */
+--color-maroon        #861A14   primary brand colour — wordmark, headings, primary buttons
+--color-maroon-dark   #5C100C   hover/pressed, announcement bar
+--color-kapila-gold   #F2C23D   label yellow — accents on dark surfaces, the seal, highlights
+--color-warm-gold     #C0831A   honey — eyebrow labels, small accents on light surfaces
+--color-cream         #FBF6EC   default page background ("paper")
+--color-sand          #F3E8D2   secondary panels, arches, image backgrounds
+--color-dark-brown    #21150F   dark sections (lab results) and footer
+--color-cocoa         #2E1E16   raised cards on dark sections
+--color-ink           #23150F   body text
+--color-muted         #6C5D50   secondary text
+--color-border        #E4D4B8   hairlines
+--color-success       #3F6F35   check marks, "Pass" chips, form success
+--color-error         #B3261E   form errors
+--color-whatsapp      #1F8F4E   the floating WhatsApp button only
 ```
 
-**Usage rules:**
-- Maroon is the primary interactive color (buttons, links, active nav state). Gold is an accent, not a background flooded across entire sections — use it for dividers, small fields, badges, and the medallion ring.
-- Cream, not stark white, is the default page background — this is what gives the "warm/premium" feel instead of a cold e-commerce template.
-- Dark brown is reserved for footer background and for body copy where extra warmth is wanted; primary body text uses `--color-ink` for readability.
-- The packaging's bright leaf-green "100% NATURAL" badge is **not** adopted as a website UI color — it belongs to the physical label, not the digital brand system. If a "natural" indicator is needed on the site, it is expressed in maroon/gold, not green, to keep the identity coherent and avoid drifting into a generic organic-food look.
-- Contrast check required before final sign-off: `--color-kapila-gold` text/icons on `--color-cream` background is likely too low-contrast for body text — gold is for accents/large elements only, never small body text.
+**Rules**
+- Cream, not white, is the default background; sections alternate cream → sand → white → dark to create rhythm without heavy decoration.
+- Gold is an accent. `kapila-gold` is only used as text on dark backgrounds (it fails contrast on cream); on light backgrounds use `warm-gold`, and only for small uppercase labels.
+- WhatsApp green is reserved for the floating chat button so it reads instantly as "WhatsApp"; every other WhatsApp action uses brand maroon with the WhatsApp icon.
 
 ---
 
 ## 3. Typography
 
-Suggested starting pairing (validated against the wordmark's geometric, slightly architectural feel):
-
 ```
---font-heading: "Playfair Display", "DM Serif Display", serif;
---font-body:    "Inter", "Manrope", sans-serif;
+--font-heading: Fraunces (variable, optical sizing)   headings, large figures, pull quotes
+--font-body:    DM Sans                                body, UI, labels
 ```
 
-- Headings use the serif to carry the "heritage/premium" feeling; the existing KAPILA wordmark itself stays as a locked logo asset (not reset in a web font) — it is used as an image/SVG wherever the literal logo appears.
-- Body copy uses a clean grotesque sans for legibility at small sizes and fast scanning — this deliberately does not try to imitate the distressed/stencil display font used in the promotional graphics (e.g., "TRADITIONAL PROCESS OF A2 GIR COW GHEE"), which reads as busy marketing-collateral styling, not a lasting on-screen type system.
-- Devanagari support: since "कपिला" appears on-pack, if any Hindi/Gujarati copy is used on the site later, pair with a Devanagari-compatible font (e.g., Noto Sans Devanagari / Noto Serif Devanagari) rather than relying on fallback rendering.
+- Fraunces gives warmth and heritage without the formality of a classic didone; its italic is used for one emphasised phrase per heading at most ("Made from curd, *churned by hand*").
+- DM Sans is geometric, echoing the KAPILA wordmark.
+- The KAPILA wordmark is an SVG (`src/components/shared/Logo.tsx`) redrawn from `images/KAPILALOGO.pdf` — never typeset in a web font.
+- Eyebrow labels: 11px, uppercase, 0.28em tracking, preceded by a short rule.
 
-**Scale (mobile-first, fluid where practical):**
+## 4. Layout, Shape & Motion
 
-```
---text-xs:    0.75rem
---text-sm:    0.875rem
---text-base:  1rem
---text-lg:    1.125rem
---text-xl:    1.375rem
---text-2xl:   1.75rem
---text-3xl:   2.25rem
---text-4xl:   2.75rem   /* hero heading, desktop */
-```
+- Content width 1240px with 20px (mobile) / 32px (desktop) gutters.
+- Section rhythm: 64px mobile → 80px tablet → 96px desktop vertical padding.
+- Shape language: large soft radii (24–32px) on cards and images, pill-shaped buttons, and the **arch** (`rounded-t-full`) — echoing jharokha/temple doorways — behind hero products and illustrations.
+- Motion: a gentle rise-in on page load, and scroll-reveals implemented with pure CSS scroll-driven animations (no JavaScript; browsers without support simply show the content). All motion is disabled under `prefers-reduced-motion`.
 
-Headings scale up meaningfully from mobile to desktop (not just body text) — see Responsive Strategy in `ux-specification.md`.
+## 5. Imagery
 
----
+- **Product photos** are true background-removed PNG cutouts on a shared canvas, so they sit on any surface at a consistent scale.
+- **Lifestyle photos** (`public/images/lifestyle/`) are cropped from the supplied promo images using only regions with no baked-in text or claims.
+- **Illustrations** (`public/images/illustrations/`) are the hand-drawn bilona/Gir cow sketches from the promo artwork, converted to transparent single-colour maroon line art.
+- **Icons** (`src/components/shared/Icons.tsx`): one thin-line set on a 24px grid — drop, churn, cow, curd, flame, flask, seal, etc.
 
-## 4. Spacing & Layout
+## 6. Components
 
-```
---space-1: 4px   --space-2: 8px   --space-3: 12px  --space-4: 16px
---space-5: 24px  --space-6: 32px  --space-7: 48px  --space-8: 64px  --space-9: 96px
-```
+Shared: `Logo`, `Header` (announcement bar + sticky nav), `Footer`, `WhatsAppFloat`, `Button` / `LinkButton` / `ExternalButton`, `Section`, `SectionHeading` + `Eyebrow`, `PageIntro`, `Icons`, `EmptyState`.
 
-- Section vertical rhythm on desktop: `--space-9` (96px) between major homepage sections; `--space-7` (48px) on mobile.
-- Max content width: ~1200px, with generous side gutters (`--space-5`–`--space-6` on mobile, wider on desktop) rather than edge-to-edge content — reinforces "premium," not "template."
-- Corner radius: small and consistent, not the rounded-everywhere look. `--radius-sm: 4px` for inputs/badges, `--radius-md: 8px` for cards/images. No pill-shaped cards.
-- Shadows: minimal, soft, used sparingly (e.g., sticky header on scroll, modal). No stacked/cheap drop shadows on every card.
+Public: `HomeHero`, `PromiseBar`, `ProductRange`, `BilonaFeature`, `PurityProof`, `KitchenSection`, `BrandStatement`, `ProductPurchasePanel` (+ `ProductGallery`, `ProductVariantSelector`), `ProcessTimeline`, `DocumentCard`, `EnquiryForm`, `FaqAccordion`, `NotFoundContent`.
 
-## 5. Imagery Style
-
-- Product photography: clean, consistent background treatment (light/neutral), consistent bottle/tin framing — matching the calm studio shots already supplied (e.g., the plain-background tin/jar photos), not the busy lifestyle-collage graphics.
-- The cow medallion device may be reused sparingly as a brand motif (e.g., small accent near "Our Story" or "Our Process"), not on every section.
-- Process/story photography, once supplied, should be treated with a consistent color grade (warm, slightly desaturated) rather than mixed styles.
-- Icons: used sparingly, thin-line or simple filled style in maroon/dark-brown — not the multiple mismatched icon styles seen across the promotional graphics (bone, shield, bandage, pregnancy icons in one graphic; leaf/lotus/bolt icons in another).
-
-## 6. Components (initial inventory — refined in the implementation phase)
-
-- Primary Button (maroon fill, cream text) — "Enquire Now"
-- Secondary Button (maroon outline, maroon text)
-- Nav bar (cream/white, maroon text, gold hairline on scroll)
-- Product Card (image, name, available sizes, "View Details")
-- Variant Selector/Pill (size chips: 1 KG / 5 KG / 15 KG, data-driven, not hard-coded)
-- Section Heading (eyebrow label + serif heading + short supporting line)
-- Trust Badge (FSSAI license number, "Lab Tested" — text-based/document-linked, not invented seal graphics)
-- FAQ Accordion
-- Contact Card (address, conditionally-rendered phone/WhatsApp/email/social rows)
-- Document Viewer/Card (for FSSAI license, lab report)
-- Footer
+Lab figures shown in `PurityProof` and on `/quality` live in `src/lib/lab-report.ts`, transcribed from the actual report — update that file when a new report is issued.
 
 ## 7. What Admin Cannot Change
 
-Per the Admin Content Principle in `requirements.md`: colors, typography, spacing, component structure, and navigation are fixed in code. Admin edits content (text, images, documents, FAQs) that flows into these fixed components — it does not choose new colors, fonts, or layouts. This is what keeps the site visually consistent as content changes.
+Per the Admin Content Principle in `requirements.md`: colours, typography, spacing, component structure, and navigation are fixed in code. Admin edits content (text, images, documents, FAQs, business settings) that flows into these components.

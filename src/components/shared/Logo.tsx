@@ -2,14 +2,38 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 
 /**
- * Digital wordmark treatment for "KAPILA / DAIRY FARM", built from the design tokens
- * to echo the geometric maroon wordmark used on Kapila packaging (see docs/design-system.md).
- *
- * This is a coded, temporary stand-in for a true logo asset. To swap in the official
- * logo file later: drop it at /public/images/brand/logo.svg and replace the JSX below
- * with an <Image src="/images/brand/logo.svg" .../> — the surrounding <Link> wrapper,
- * sizing, and every call site (Header, Footer) do not need to change.
+ * The KAPILA wordmark, redrawn as SVG from the brand logo (images/KAPILALOGO.pdf): a
+ * geometric sans where each "A" is an open chevron with a thin left and heavy right leg.
+ * Vector, so it stays sharp at any size and takes its colour from `currentColor`.
  */
+function Wordmark({ className }: { className?: string }) {
+  return (
+    // Strokes deliberately overshoot the top/bottom edges; the SVG viewport clips them,
+    // which gives the diagonals the flat, horizontal terminals of the original wordmark.
+    <svg viewBox="0 0 434 100" className={className} aria-hidden="true" fill="none" stroke="currentColor">
+      <g strokeLinejoin="miter">
+        {/* K */}
+        <path d="M5.5 -5V105" strokeWidth="11" />
+        <path d="M5.5 62L66 -4" strokeWidth="10" />
+        <path d="M25 40L68 106" strokeWidth="11" />
+        {/* A */}
+        <path d="M84 106L119.5 -6" strokeWidth="6.5" />
+        <path d="M119.5 -6L156 106" strokeWidth="12" />
+        {/* P */}
+        <path d="M182 -5V105" strokeWidth="11" />
+        <path d="M182 5.5H213A24 24 0 0 1 213 53.5H182" strokeWidth="11" />
+        {/* I */}
+        <path d="M264 -5V105" strokeWidth="11" />
+        {/* L */}
+        <path d="M291.5 -5V94.5H340" strokeWidth="11" />
+        {/* A */}
+        <path d="M357 106L392.5 -6" strokeWidth="6.5" />
+        <path d="M392.5 -6L429 106" strokeWidth="12" />
+      </g>
+    </svg>
+  );
+}
+
 export function Logo({
   tone = "maroon",
   className,
@@ -17,34 +41,20 @@ export function Logo({
   tone?: "maroon" | "cream";
   className?: string;
 }) {
-  const textColor = tone === "maroon" ? "text-maroon" : "text-cream";
-  const ruleColor = tone === "maroon" ? "bg-maroon/60" : "bg-cream/60";
+  const color = tone === "maroon" ? "text-maroon" : "text-cream";
+  const rule = tone === "maroon" ? "bg-maroon/50" : "bg-cream/50";
 
   return (
     <Link
       href="/"
       aria-label="Kapila Dairy Farm — Home"
-      className={cn("group inline-flex flex-col items-start leading-none", className)}
+      className={cn("inline-flex w-[124px] flex-col items-stretch sm:w-[138px]", color, className)}
     >
-      <span
-        className={cn(
-          "font-heading text-2xl font-bold tracking-[0.06em] sm:text-3xl",
-          textColor
-        )}
-      >
-        KAPILA
-      </span>
-      <span className="mt-1 flex items-center gap-2">
-        <span className={cn("h-px w-4", ruleColor)} aria-hidden="true" />
-        <span
-          className={cn(
-            "text-[10px] font-semibold tracking-[0.35em] sm:text-xs",
-            textColor
-          )}
-        >
-          DAIRY FARM
-        </span>
-        <span className={cn("h-px w-4", ruleColor)} aria-hidden="true" />
+      <Wordmark className="h-auto w-full" />
+      <span className="mt-[5px] flex items-center gap-1.5">
+        <span className={cn("h-px flex-1", rule)} aria-hidden="true" />
+        <span className="text-[8.5px] font-medium tracking-[0.34em] sm:text-[9.5px]">DAIRY FARM</span>
+        <span className={cn("h-px flex-1", rule)} aria-hidden="true" />
       </span>
     </Link>
   );

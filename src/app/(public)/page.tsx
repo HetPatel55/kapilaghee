@@ -1,51 +1,54 @@
 import type { Metadata } from "next";
 import { getActiveProducts, getBusinessSettings, getPageSections } from "@/lib/data";
-import { HeroSection } from "@/components/public/HeroSection";
-import { TrustStrip } from "@/components/public/TrustStrip";
-import { ProductShowcase } from "@/components/public/ProductShowcase";
-import { WhyKapila } from "@/components/public/WhyKapila";
-import { ProcessTimeline } from "@/components/public/ProcessTimeline";
-import { QualitySection } from "@/components/public/QualitySection";
-import { GheeBenefits } from "@/components/public/GheeBenefits";
+import { HomeHero } from "@/components/public/HomeHero";
+import { PromiseBar } from "@/components/public/PromiseBar";
+import { ProductRange } from "@/components/public/ProductRange";
+import { BilonaFeature } from "@/components/public/BilonaFeature";
+import { PurityProof } from "@/components/public/PurityProof";
+import { KitchenSection } from "@/components/public/KitchenSection";
+import { BrandStatement } from "@/components/public/BrandStatement";
 import { buildLocalBusinessJsonLd } from "@/lib/structured-data";
+import { buildWhatsAppHref } from "@/lib/contact";
 
 const siteUrl = process.env.SITE_URL ?? "https://www.kapiladairyfarm.com";
 
 export const metadata: Metadata = {
-  title: "Kapila Dairy Farm — Pure A2 Gir Cow Ghee, Surat",
+  title: "Kapila Dairy Farm — Pure A2 Gir Cow Bilona Ghee, Surat",
   description:
-    "Kapila Dairy Farm crafts pure A2 Gir Cow Ghee in Surat, Gujarat — no added ingredients, FSSAI licensed and lab tested for purity. Available in 1 KG, 5 KG and 15 KG.",
+    "Pure A2 Gir cow ghee, hand-churned by the traditional Bilona method in Surat, Gujarat. No additives or preservatives — FSSAI licensed and lab tested. Available in 1 KG, 5 KG and 15 KG.",
   alternates: { canonical: "/" },
 };
 
 export default async function HomePage() {
-  const [products, settings, homeSections, processSections, qualitySections] = await Promise.all([
+  const [products, settings, homeSections, processSections] = await Promise.all([
     getActiveProducts(),
     getBusinessSettings(),
     getPageSections("home"),
     getPageSections("process"),
-    getPageSections("quality"),
   ]);
 
   const product = products[0] ?? null;
-  const hasQualityDocuments = qualitySections.some((s) => s.documents.length > 0);
+  const whatsapp = settings?.whatsapp ?? null;
   const jsonLd = buildLocalBusinessJsonLd(settings, siteUrl);
 
   return (
     <>
       {jsonLd ? (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       ) : null}
-      <HeroSection product={product} sections={homeSections} />
-      <TrustStrip product={product} />
-      <ProductShowcase products={products} />
-      <WhyKapila sections={homeSections} />
-      <ProcessTimeline steps={processSections} variant="teaser" />
-      <QualitySection homeSections={homeSections} hasDocuments={hasQualityDocuments} />
-      <GheeBenefits sections={homeSections} />
+      <HomeHero
+        product={product}
+        sections={homeSections}
+        whatsappHref={
+          whatsapp ? buildWhatsAppHref(whatsapp, "Hi Kapila Dairy Farm, I'd like to order ghee.") : null
+        }
+      />
+      <PromiseBar />
+      <ProductRange product={product} whatsappNumber={whatsapp} />
+      <BilonaFeature steps={processSections} />
+      <PurityProof />
+      <KitchenSection sections={homeSections} />
+      <BrandStatement />
     </>
   );
 }
